@@ -1,56 +1,72 @@
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom';
+
+
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Comment from './Comment.js'
 import Author from './Author.js'
+import Post from './Post.js'
+import Home from './Home.js'
+import Food from './Food.js'
+import Movie from './Movie.js'
+import About from './About.js'
+
+var post = {
+  title:"Dinosaurs are Awesome",
+  author:"Stealth Stegasaurus",
+  body:"Check out this property",
+  comments:["First!", "Great post", "Hire this author now!"],
+  authors:["Au1", "Au2", "Au3"]
+}
+
+var favourites = {
+  food: 'Pasta',
+  movie: 'Spaceballs'
+}
 
 
-class Post extends Component {
+class App extends Component {
 
-  constructor(props){
-    super()
-    this.state = {
-      body: props.body
-    }
-  }
-
-  changeBody(e){
-    this.setState({
-      body: prompt ("What should the new body be?")
-    })
-  }
-
-
-  handleFormInput(e){
-    this.setState({
-      body: e.target.value
-    })
-  }
-
-
-  render() {
-    let allComments = [
-      <Comment body={this.props.comments[0]} />,
-      <Comment body={this.props.comments[1]} />,
-      <Comment body={this.props.comments[2]} />
-    ]
-    let authors = [
-      <Author author={this.props.allAuthors[0]} />,
-      <Author author={this.props.allAuthors[1]} />,
-      <Author author={this.props.allAuthors[2]} />,
-    ]
-    return (
+render() {
+  return(
+    <Router>
       <div>
-        <h1>{this.props.title}</h1>
-        <p>{authors}</p>
-        <p>{this.state.body}</p>
-        <button onClick= {(e) => this.changeBody(e)}>Change Body</button>
-        <input type="text" onChange={(e) => this.handleFormInput(e)} />
-        <h3>Comments:</h3>
-        {allComments}
+      <nav>
+            <Link to="/">Go to Home Page</Link>{' '}
+            <Link to="/post">See Our Blog Posts</Link>{' '}
+            <Link to="/food">Find out my favourite food</Link>{' '}
+            <Link to="/movie">Best Movie ever!!</Link>{' '}
+            <Link to="/about">Contact Us!</Link>
+      </nav>
+      <Route exact path="/" component={Home} />
+      <Route path="/post" component={
+        () => (
+          <Post title={post.title}
+           allAuthors={post.authors}
+           body={post.body}
+           comments={post.comments} />
+        )
+      }/>
+      <Route path="/food" component = {
+        () => (
+          <Food fav={favourites.food} />
+        )
+      }/>
+      <Route path="/movie" component = {
+        () => (
+          <Movie fav={favourites.movie} />
+        )
+      }/>
+      <Route path="/about" component={About} />
       </div>
-    );
+    </Router>
+)
   }
 }
 
-export default Post;
+export default App;
